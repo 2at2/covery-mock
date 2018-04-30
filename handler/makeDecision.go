@@ -24,6 +24,8 @@ func (h MakeDecision) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	h.Ray.Debug("Decision request :val", args.String{N: "val", V: string(bts)})
+
 	var req makeDecisionRequest
 	if err := json.Unmarshal(bts, &req); err != nil {
 		sendResponse(w, err)
@@ -59,7 +61,7 @@ func (h MakeDecision) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sendResponse(w, makeDecisionResponse{
-		RequestID: time.Now().Second(),
+		RequestID: int(time.Now().UnixNano()),
 		Score:     score,
 		Reject:    reject,
 		Manual:    manual,
